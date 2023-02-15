@@ -1,15 +1,22 @@
 
 const router = require('express').Router();
 
+// Import du router-lvl middleware
+const routerMiddleware = require('../middlewares/router.middleware');
+// Sur toutes les routes auxquelles je l'ai ajouté, il sera déclenché
+// route.method(url, middleware, () => {})
+
+
 // Gestion des routes
+// router.get('/', homeController.home_get)
 router.get('/', (req, res) => {
     console.log('Home GET');
     // res.end('Bonjour');
     let data = { id: 1, pseudo: 'Caro', msg: 'Salut tout le monde' };
-    // res.status(200).send(JSON.stringify(data));
-    res.status(200).json(data)
+    // res.status(200).send(JSON.stringify(data));    // -> string
+    res.status(200).json(data);                       // -> json
 });
-router.get('/contact', (req, res) => {
+router.get('/contact', routerMiddleware, (req, res) => {
     console.log('Contact GET');
 });
 router.post('/contact', (req, res) => {
@@ -17,8 +24,9 @@ router.post('/contact', (req, res) => {
 });
 router.get('/about', (req, res) => {
     console.log('About GET');
+    throw new Error('Kaboum 💣');
 });
-router.get('/fans', (req, res) => {
+router.get('/fans', routerMiddleware, (req, res) => {
     // fans est un segment statique
     console.log('Page affichant la liste de tous les fans');
 });
